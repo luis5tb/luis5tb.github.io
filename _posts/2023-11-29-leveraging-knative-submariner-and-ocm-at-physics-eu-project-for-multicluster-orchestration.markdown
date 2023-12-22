@@ -13,7 +13,7 @@ This blog post is about how we have leveraged [Knative](https://knative.dev/docs
 
 Once a (set of) cluster(s) is onboarded into OCM, the clusters can be managed from the hub cluster (i.e. the central cluster used to manage the different edges, and that contains the Submariner broker). The first step, before being able to deploy Functions in a given edge, is to configure (from the central cluster) the edge with the required PHYSICS components/applications, connecting them with the required components in the central (Hub) cluster.
 
-![](https://ltomasbo.files.wordpress.com/2023/11/screenshot-from-2023-09-06-14-14-49.png?w=1024)
+![](../../../../images/screenshot-from-2023-09-06-14-14-49.png?w=1024)
 
 As depicted in the previous figure, the cluster onboarding mechanism is designed in a serverless fashion, using Knative eventing and serving:
 
