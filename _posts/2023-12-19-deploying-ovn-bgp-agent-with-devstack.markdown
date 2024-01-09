@@ -5,8 +5,8 @@ date: "2023-12-19"
 categories: BGP
 ---
 
-[DevStack](https://docs.openstack.org/devstack/latest/) is a nice tool for developers to easily test, debug and code for different OpenStack projects. We have recently [added support](https://review.opendev.org/c/openstack/ovn-bgp-agent/+/814185) for the OVN BGP Agent so that we can deploy a testing OpenStack  
-setup with the agent. It won't connect to any peer but it is sufficient to test if the  
+[DevStack](https://docs.openstack.org/devstack/latest/) is a nice tool for developers to easily test, debug and code for different OpenStack projects. We have recently [added support](https://review.opendev.org/c/openstack/ovn-bgp-agent/+/814185) for the OVN BGP Agent so that we can deploy a testing OpenStack
+setup with the agent. It won't connect to any peer but it is sufficient to test if the
 wiring is done properly, as well as if FRR is configured as it should. And you could create another testing VM in the same bridge if you want to test the actual BGP advertisement and external connectivity. This is also a nice first step to support more complex CI testing in the future (tempest-like).
 
 ## Steps
@@ -35,8 +35,8 @@ And in the **_devstack-bgp.sh_** script I simply added the needed steps to deplo
 ```bash
 set -v
 
-sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0s
-udo apt-get install -y git vim tmux
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sudo apt-get install -y git vim tmux
 
 sudo mkdir /opt/stack
 sudo chown vagrant:root /opt/stack
