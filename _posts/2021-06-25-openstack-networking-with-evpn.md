@@ -39,7 +39,7 @@ To configure the EVPN the agent creates the next:
 - **_Bridge device_**, where the vxlan device will be connected, and belonging to the previously created vrf; also using the VNI number as name suffix: br-1001
 
     `ip link add name br-1001 type bridge stp_state 0`
-    
+
     `ip link set br-1001 master vrf-1001`
 
     `ip link set vxlan-1001 master br-1001`
@@ -54,11 +54,11 @@ With that, the agent is able to expose/withdraw VM IPs through BGP EVPN by addin
 
 ```
 ADD_VRF_TEMPLATE = '''
-vrf {{ vrf_name }}
- vni {{ vni }}
+vrf \{\{ vrf_name \}\}
+ vni {\{\ vni \}\}
 exit-vrf
- 
-router bgp {{ bgp_as }} vrf {{ vrf_name }}
+
+router bgp \{\{ bgp_as \}\} vrf \{\{ vrf_name \}\}
  address-family ipv4 unicast
    redistribute connected
  exit-address-family
@@ -69,13 +69,13 @@ router bgp {{ bgp_as }} vrf {{ vrf_name }}
    advertise ipv4 unicast
    advertise ipv6 unicast
  exit-address-family
- 
+
 '''
- 
+
 DEL_VRF_TEMPLATE = '''
-no vrf {{ vrf_name }}
-no router bgp {{ bgp_as }} vrf {{ vrf_name }}
- 
+no vrf \{\{ vrf_name \}\}
+no router bgp \{\{ bgp_as \}\} vrf \{\{ vrf_name \}\}
+
 '''
 ```
 
@@ -84,7 +84,7 @@ Finally, the agent needs to ensure the traffic arriving to the node can be redir
 - Add the VRF device to the OVS provider bridge (e.g., br-ex)
 
     `ovs-vsctl add-port br-ex vrf-1001`
-  
+
 - Add routes into the VRF associated routing table (1001 in the above example) for both the cr-lrp IP (router gateway port IP) and the subnet CIDR so that the traffic is redirected to the OVS provider bridge (e.g., br-ex)
 
   ```
@@ -167,14 +167,14 @@ If we want to use the agent without the BGPVPN API we can do so by doing the abo
 
 ```
 (overcloud) $ openstack port list --router router
-+--------------------------------------+------+-------------------+----------------------------------------------------------------------------------------------+--------+                  
-| ID                                   | Name | MAC Address       | Fixed IP Addresses                                                                           | Status |                  
-+--------------------------------------+------+-------------------+----------------------------------------------------------------------------------------------+--------+                  
-| 5bc97046-6483-4e5a-98db-0e616acfac07 |      | fa:16:3e:7f:59:7f | ip_address='172.24.100.61', subnet_id='30845b27-aaec-4a6f-82b4-177908bebd02'                 | ACTIVE |                  
-| 64e99514-6e13-43c9-a11f-7861bf6f75a4 |      | fa:16:3e:8d:c4:51 | ip_address='20.0.0.1', subnet_id='281a316f-6575-4b4c-a9a6-c3660ea8dbb3'                      | ACTIVE |                     
++--------------------------------------+------+-------------------+----------------------------------------------------------------------------------------------+--------+
+| ID                                   | Name | MAC Address       | Fixed IP Addresses                                                                           | Status |
++--------------------------------------+------+-------------------+----------------------------------------------------------------------------------------------+--------+
+| 5bc97046-6483-4e5a-98db-0e616acfac07 |      | fa:16:3e:7f:59:7f | ip_address='172.24.100.61', subnet_id='30845b27-aaec-4a6f-82b4-177908bebd02'                 | ACTIVE |
+| 64e99514-6e13-43c9-a11f-7861bf6f75a4 |      | fa:16:3e:8d:c4:51 | ip_address='20.0.0.1', subnet_id='281a316f-6575-4b4c-a9a6-c3660ea8dbb3'                      | ACTIVE |
 +--------------------------------------+------+-------------------+----------------------------------------------------------------------------------------------+--------+
 
 # At OVN NB DB
-# ovn-nbctl set logical_switch_port 5bc97046-6483-4e5a-98db-0e616acfac07 external_ids:"neutron_bgpvpn\:vni"=1001                  
-# ovn-nbctl set logical_switch_port 64e99514-6e13-43c9-a11f-7861bf6f75a4 external_ids:"neutron_bgpvpn\:vni"=1001  
+# ovn-nbctl set logical_switch_port 5bc97046-6483-4e5a-98db-0e616acfac07 external_ids:"neutron_bgpvpn\:vni"=1001
+# ovn-nbctl set logical_switch_port 64e99514-6e13-43c9-a11f-7861bf6f75a4 external_ids:"neutron_bgpvpn\:vni"=1001
 ```
