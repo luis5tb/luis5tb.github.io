@@ -140,7 +140,7 @@ There are a few things to note in that `quantize_model` function:
 
 #### Datasets
 
-The dataset used for quantization is `VMware/open-instruct`, and we limit the amount of samples (after shuffling them) to 4096. The rationale for this is that after 2048 samples the is not much gain on adding more while the computations are expensive.
+The dataset used for quantization is `VMware/open-instruct`, and we limit the amount of samples (after shuffling them) to 4096. The rationale is that after 2048 samples there isn't much gain on adding more samples while the computations are expensive.
 
 Also depending on the dataset model you may need to adapt the `preprocess` function so that it creates an appropiate `chat` list to be parsed by the `apply_chat_template` function.
 
