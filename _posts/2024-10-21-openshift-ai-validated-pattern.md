@@ -157,6 +157,7 @@ The automation process involves the following steps:
     ```
 
   Then add your keys to the `values-secret.yaml.template, for example:
+
     ```yaml
       secrets:
       - name: config-demo
@@ -251,7 +252,7 @@ With the dependencies in place, deploying the RAG demo on OpenShift AI can be do
     $ ./pattern.sh make install
     ```
 
-3. **Configure the RAG pipelines**: After the infrastructure is in place, the OpenShift AI project is created, and the pipeline server is configured. You can import the required pipelines and upload the necessary documents to the MinIO buckets. This last part is not fully automated yet:
+3. **Configure the RAG pipelines**: After the infrastructure is in place, the OpenShift AI project is created, and the pipeline server is configured. You can import the required pipelines and upload the necessary documents to the MinIO buckets. This last step is not automated yet:
 
     1. Add documents to the appropriate folder in the Minio `localdocs` bucket:
        ![](../../../../images/localdocs_bucket.png?w=1024)
@@ -276,6 +277,6 @@ With the dependencies in place, deploying the RAG demo on OpenShift AI can be do
 
 ## Conclusions
 
-The `rhoai-pattern-demo` Validated Pattern simplifies and automates the deployment of a RAG application, leveraging a GitOps-based approach to ensure consistency and repeatability. By using this pattern, you can focus on building and refining your AI applications without worrying about the underlying infrastructure and configuration, reducing errors and saving time.
+The **rhoai-pattern-demo** Validated Pattern simplifies and automates the deployment of a RAG application, leveraging a GitOps-based approach to ensure consistency and repeatability. By using this pattern, you can focus on building and refining your AI applications without worrying about the underlying infrastructure and configuration, reducing errors and saving time.
 
 With the increasing complexity of AI workloads and hybrid cloud environments, validated patterns offer a streamlined way to deploy business-critical applications efficiently. Whether you're experimenting with RAG or building production-ready AI solutions, this automation accelerates your workflow on OpenShift.
