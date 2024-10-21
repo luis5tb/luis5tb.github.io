@@ -1,11 +1,10 @@
 ---
-title: "OpenShift AI Validated Pattern: RAG demo"
-date: "2024-10-18"
+title: "Automating RAG Deployment with OpenShift AI and Validated Patterns"
+date: "2024-10-21"
 categories: AI
 layout: post
 ---
 
-# Automating RAG Deployment with OpenShift AI and Validated Patterns
 
 Creating demos that are easily reproduced is key for collaboration and knowledge sharing. This blog post covers the steps followed to create automations, in a GitOps fashion, to deploy a Retrieval-Augmented Generation (RAG) demo on top of OpenShift, including the OpenShift AI infrastructure and its dependencies.
 
@@ -17,13 +16,13 @@ Deploying and configuring all the components for a RAG application, though not i
 
 ## OpenShift AI Validated Pattern
 
-The **OpenShift AI Validated Pattern** automates the installation and configuration of all components necessary for running OpenShift AI. This pattern significantly simplifies the deployment process, allowing you to deploy the RAG demo on OpenShift AI without manual intervention for each component.
+The **RAG Demo Validated Pattern** automates the installation and configuration of all components necessary for running OpenShift AI. This pattern significantly simplifies the deployment process, allowing you to deploy the RAG demo on OpenShift AI without manual intervention for each component.
 
-The code for the validated pattern is located at https://github.com/luis5tb/rhoai-patterns-demo, and it is named `rhoai-pattern-demo`
+The code for the validated pattern is located at https://github.com/luis5tb/rhoai-patterns-demo, and it is named **rhoai-pattern-demo**
 
 ### Dependencies Installation
 
-The `rhoai-pattern-demo` pattern handles the installation of several critical dependencies required to run AI workloads efficiently on OpenShift AI. These include:
+The **rhoai-pattern-demo** pattern handles the installation of several critical dependencies required to run AI workloads efficiently on OpenShift AI. These include:
 
 - **OpenShift Serverless**: Provides event-driven architecture, enabling applications to scale based on demand, without the need for constant resource allocation. This is required by the KServe component, used by OpenShift AI to deploy models.
   
@@ -119,7 +118,7 @@ The charts path contains the yaml template used to create these CRs.
 
 **Retrieval-Augmented Generation (RAG)** is a technique that combines traditional retrieval-based methods with generative models like large language models (LLMs). The key idea behind RAG is to retrieve relevant context (documents or data) from a database or external source, which is then used by the LLM to generate more accurate and relevant responses. This approach enhances the quality and relevance of generated outputs, making it highly useful for applications like intelligent search, customer support, and knowledge management.
 
-The RAG-base demo use case assumes there is some private local data that needs to be used in conjunction with public data. This set of data needs to be added (at different times) to the VectorDB for retrieval and use as context for the LLM.
+The RAG-base demo assumes there is some private local data that needs to be used in conjunction with public data. This set of data needs to be added (at different times) to the VectorDB for retrieval and use as context for the LLM.
 
 Once the OpenShift AI cluster setup is automated, we can proceed with the automation of the RAG components needed by our demo:
 
@@ -130,109 +129,114 @@ Once the OpenShift AI cluster setup is automated, we can proceed with the automa
 
 ### RAG automation
 
-The code for this automation is available in the same repository but under the `databricks-demo` branch: `https://github.com/luis5tb/rhoai-patterns-demo/tree/databricks-demo`.
+The code for this automation is available in the same repository but under the `rag-demo` branch: `https://github.com/luis5tb/rhoai-patterns-demo/tree/rag-demo`.
 
 The automation process involves the following steps:
 
 - Utilize the default secrets management that comes from the [template](https://github.com/validatedpatterns/multicloud-gitops). To enable this, the `vault` and `golang-external-secrets` applications need to be added to the `values-hub.yaml` in their own project (`hub`):
-  ```yaml
-  namespaces:
-    - vault
-    - golang-external-secrets  
-  projects:
-    - hub
-  applications:
-    vault:
-      name: vault
-      namespace: vault
-      project: hub
-      chart: hashicorp-vault
-      chartVersion: 0.1.*
-    golang-external-secrets:
-      name: golang-external-secrets
-      namespace: golang-external-secrets
-      project: hub
-      chart: golang-external-secrets
-      chartVersion: 0.1.*
-  ```
+  
+    ```yaml
+    namespaces:
+      - vault
+      - golang-external-secrets  
+    projects:
+      - hub
+    applications:
+      vault:
+        name: vault
+        namespace: vault
+        project: hub
+        chart: hashicorp-vault
+        chartVersion: 0.1.*
+      golang-external-secrets:
+        name: golang-external-secrets
+        namespace: golang-external-secrets
+        project: hub
+        chart: golang-external-secrets
+        chartVersion: 0.1.*
+    ```
 
   Then add your keys to the `values-secret.yaml.template, for example:
-  ```yaml
-    secrets:
-    - name: config-demo
-        vaultPrefixes:
-        - global
-        fields:
-        - name: secret
-        onMissingValue: generate
-        vaultPolicy: validatedPatternDefaultPolicy
+    ```yaml
+      secrets:
+      - name: config-demo
+          vaultPrefixes:
+          - global
+          fields:
+          - name: secret
+          onMissingValue: generate
+          vaultPolicy: validatedPatternDefaultPolicy
 
-    - name: minio-secret
-        fields:
-        - name: minio_root_user
-        value: MY_MINIO_USER
-        - name: minio_root_password
-        value: MY_MINIO_PASSWORD
+      - name: minio-secret
+          fields:
+          - name: minio_root_user
+          value: MY_MINIO_USER
+          - name: minio_root_password
+          value: MY_MINIO_PASSWORD
 
-    - name: openai-keys
-        fields:
-        - name: OPENAI_API_BASE
-        value: MY_OPENAI_API_BASE
-        - name: OPENAI_API_KEY
-        value: MY_OPENAI_API_KEY
-    ```
+      - name: openai-keys
+          fields:
+          - name: OPENAI_API_BASE
+          value: MY_OPENAI_API_BASE
+          - name: OPENAI_API_KEY
+          value: MY_OPENAI_API_KEY
+      ```
+  
 - Automate the setup of S3 storage for private documents. In this demo, for simplicity, it is also used for public documents. The S3 storage setup is done using MinIO as it is simple to deploy. This automation includes deploying the MinIO application and creating an initial bucket for the documents:
-  ```yaml
-  clusterGroup:
-  namespaces:
-      - minio-ns
-  projects:
-      - s3
-  applications:
+
+    ```yaml
+    clusterGroup:
+    namespaces:
+        - minio-ns
+    projects:
+        - s3
+    applications:
+        minio:
+        name: minio
+        namespace: minio-ns
+        project: s3
+        path: charts/all/minio
+    vars:
       minio:
-      name: minio
-      namespace: minio-ns
-      project: s3
-      path: charts/all/minio
-  vars:
-    minio:
-      bucket_name: localdocs
-  ```
+        bucket_name: localdocs
+    ```
 
 - Deployment of VectorDB, in this case, ChromaDB:
-  ```yaml
-  namespaces:
-    - chromadb-ns  
-  projects:
-    - vectordb
-  applications:
-    chromadb:
-      name: chromadb
-      namespace: chromadb-ns
-      project: vectordb
-      path: charts/all/chromadb
-  ```
+
+    ```yaml
+    namespaces:
+      - chromadb-ns  
+    projects:
+      - vectordb
+    applications:
+      chromadb:
+        name: chromadb
+        namespace: chromadb-ns
+        project: vectordb
+        path: charts/all/chromadb
+    ```
 
 - Automate OpenShift AI resources, including the Data Science project (a namespace with extra annotations/labels), the Pipeline server inside it, and the secret with credentials to access the LLM endpoint:
-  ```yaml
-  namespaces:
-    - rag-demo:
-        annotations:
-          openshift.io/description: 'Databricks RAG Workspace'
-          openshift.io/display-name: 'Databricks RAG Workspace'
-        labels:
-          kubernetes.io/metadata.name: "rag-demo"
-          modelmesh-enabled: 'false'
-          opendatahub.io/dashboard: 'true'
-  projects:
-    - rag
-  applications:
-    rag-demo:
-      name: rag-demo
-      namespace: rag-demo
-      project: rag
-      path: charts/all/rag
-  ```
+
+    ```yaml
+    namespaces:
+      - rag-demo:
+          annotations:
+            openshift.io/description: 'RAG Workspace'
+            openshift.io/display-name: 'RAG Workspace'
+          labels:
+            kubernetes.io/metadata.name: "rag-demo"
+            modelmesh-enabled: 'false'
+            opendatahub.io/dashboard: 'true'
+    projects:
+      - rag
+    applications:
+      rag-demo:
+        name: rag-demo
+        namespace: rag-demo
+        project: rag
+        path: charts/all/rag
+    ```
 
 ### Steps to Deploy RAG on OpenShift AI
 
@@ -256,7 +260,7 @@ With the dependencies in place, deploying the RAG demo on OpenShift AI can be do
        ![](../../../../images/minio_ui.png?w=1024)
 
     2. Import the VectorDB initialization pipeline. A sample is available at:  
-       `https://github.com/luis5tb/rhoai-patterns-demo/tree/databricks-demo/sample_pipelines/initialize_vectordb_pipeline.yaml`:
+       `https://github.com/luis5tb/rhoai-patterns-demo/tree/rag-demo/sample_pipelines/initialize_vectordb_pipeline.yaml`:
        ![](../../../../images/empty_pipeline.png?w=1024)
        ![](../../../../images/initialize_pipeline.png?w=1024)
        ![](../../../../images/vecctordb_pipeline.png?w=1024)
@@ -265,7 +269,7 @@ With the dependencies in place, deploying the RAG demo on OpenShift AI can be do
        ![](../../../../images/chromadb_endpoint.png?w=1024)
    
     4. Import the RAG pipeline. A sample is available at:  
-       `https://github.com/luis5tb/rhoai-patterns-demo/tree/databricks-demo/sample_pipelines/rag_pipeline.yaml`:
+       `https://github.com/luis5tb/rhoai-patterns-demo/tree/rag-demo/sample_pipelines/rag_pipeline.yaml`:
        ![](../../../../images/rag_pipeline.png?w=1024)
 
     5. Trigger the RAG pipeline. Fill in the required values (including the ChromaDB endpoint from earlier) and the question you wish to answer.
