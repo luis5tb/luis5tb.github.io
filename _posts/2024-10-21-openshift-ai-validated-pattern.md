@@ -167,19 +167,21 @@ The automation process involves the following steps:
         - name: secret
         onMissingValue: generate
         vaultPolicy: validatedPatternDefaultPolicy
+
     - name: minio-secret
         fields:
         - name: minio_root_user
         value: MY_MINIO_USER
         - name: minio_root_password
         value: MY_MINIO_PASSWORD
+
     - name: openai-keys
         fields:
         - name: OPENAI_API_BASE
         value: MY_OPENAI_API_BASE
         - name: OPENAI_API_KEY
         value: MY_OPENAI_API_KEY
-      ```
+    ```
   
 - Automate the setup of S3 storage for private documents. In this demo, for simplicity, it is also used for public documents. The S3 storage setup is done using MinIO as it is simple to deploy. This automation includes deploying the MinIO application and creating an initial bucket for the documents:
 
