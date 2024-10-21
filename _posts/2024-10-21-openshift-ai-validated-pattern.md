@@ -167,14 +167,12 @@ The automation process involves the following steps:
         - name: secret
         onMissingValue: generate
         vaultPolicy: validatedPatternDefaultPolicy
-
     - name: minio-secret
         fields:
         - name: minio_root_user
         value: MY_MINIO_USER
         - name: minio_root_password
         value: MY_MINIO_PASSWORD
-
     - name: openai-keys
         fields:
         - name: OPENAI_API_BASE
