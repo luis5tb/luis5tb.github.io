@@ -347,8 +347,15 @@ In addition, after the template deployment is triggered, another secret is requi
 
 ## What is Next
 
-- For the Agentic framework, we plan to complement LangGraph with [LlamaStack](https://github.com/meta-llama/llama-stack)—a collection of standard and interoperable APIs designed to support the core building blocks required to bring generative AI applications to market (think of it as the Gen AI middleware APIs). These building blocks are delivered as interoperable APIs, enabling a wide range of service providers to offer their own implementations. This approach allows AI developers to switch seamlessly between compute environments and AI and data platform providers (such as Red Hat AI, AWS Bedrock, Azure, Databricks, and Ollama) with minimal adjustments to configurations. For example, with a Red Hat AI distribution of the Llama Stack (Llama Stack HTTP server on OpenShift), the agent application will leverage standard Llama Stack Inference API calls with the [vLLM Provider](https://blog.vllm.ai/2025/01/27/intro-to-llama-stack-with-vllm.html) instead of relying on proprietary APIs like OpenAI.
-- We plan to enhance the evaluation aspect of Responsible AI with guardrails protecting the runtime application. Options include Trusty AI guardrails with a Granite guard model or Bedrock/Azure Foundry managed guardrails service.
+### Llama Stack and MCP
+
+- For the Agentic framework, we plan to complement LangGraph with [LlamaStack](https://github.com/meta-llama/llama-stack)—a collection of standard and interoperable APIs designed to support the core building blocks required to bring generative AI applications to market (think of it as the Gen AI middleware APIs). These building blocks are delivered as interoperable APIs, enabling a wide range of Service Providers to offer their own implementations. This approach allows AI developers to switch seamlessly between compute environments and AI and data platform providers (such as Red Hat AI, AWS Bedrock, Azure, Databricks, and Ollama) with minimal adjustments to configurations. As one example, with a Red Hat AI distribution of the Llama Stack (Llama Stack HTTP server on OpenShift) the agent application will leverage standard Llama Stack Inference API calls with the remote [vLLM Provider](https://blog.vllm.ai/2025/01/27/intro-to-llama-stack-with-vllm.html) instead of relying on proprietary APIs like OpenAI.
+  - As part of the Llama Stack release, we will also move the tools execution to an MCP Server. MCP is an open-source protocol that functions as a universal standard for AI systems to access external data sources and tools through a client-server architecture. Llama Stack MCP provider will act as the MCP client connecting the Agentic AI services of the demo to tools and data sources. MCP was developed and open sourced by Anthropic but quickly got adopted by Industry leaders like MS and OpenAI. With more MCP servers, clients and integrations it is becoming the De facto protocol to bridge between agentic systems and the enterprise digital environment.
+
+### Responsible AI : Safety (Guardrails)
+
+- We plan to complement the evaluation part of the Responsible AI with guardrails protecting the runtime application. Options are Trusty AI guardrails with a Granite guard model or Bedrock/Azure Foundry managed guardrails service. This part will ideally be done using the [Llama Stack Safety API](https://github.com/meta-llama/llama-stack/tree/main/llama_stack/providers/remote/safety).
+
 
 ### Known Issues
 #### Developer Hub GitHub Authentication 
