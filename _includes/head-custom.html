@@ -1,0 +1,33 @@
+<style>
+  .page-header {
+    position: relative;
+    background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(21, 87, 153, 0.85) 0%, rgba(21, 153, 87, 0.85) 100%);
+    z-index: 1;
+  }
+  
+  .page-header > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  h1.project-name {
+    color: rgba(255, 255, 255, 1);
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    background-color: rgba(255, 255, 255, 1);
+  }
+</style>
+
