@@ -21,8 +21,8 @@
 title: LUIS TOMÁS' BLOG
 email: luis5tb@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Blog about Cloud, Containers, Networking, Open Source, and other related
-  stuff...
+  Blog about AI, Hybrid Cloud, Networking, Open Source, research, and other
+  related stuff
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://luis5tb.github.io"
 twitter_username: luis5tb
