@@ -174,14 +174,18 @@ A2A Request
 ### Task States
 
 We map every operation to a specific state, allowing the calling agent to understand exactly where the process stands:
-```
-submitted	       Task has been received and queued.
-working	           Task is being processed (includes streaming generation).
-completed	       Task finished successfully.
-failed	           Task failed with an error.
-input_required	   Agent needs additional input from the user (e.g., clarification).
-auth_required	   Authentication is required to continue.
-```
+
+
+| State            | Description                                                      |
+|------------------|------------------------------------------------------------------|
+| submitted        | Task has been received and queued.                               |
+| working          | Task is being processed (includes streaming generation).         |
+| completed        | Task finished successfully.                                      |
+| failed           | Task failed with an error.                                       |
+| input_required   | Agent needs additional input from the user (e.g., clarification).|
+| auth_required    | Authentication is required to continue.                          |
+
+
 
 ### Status Update Handling
 
